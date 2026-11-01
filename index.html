@@ -1,1521 +1,2774 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <meta name="description" content="Site institucional do Instituto Antonio Henrique Amaral, associação privada ligada à cultura, à arte, às bibliotecas e aos arquivos.">
-
-    <meta name="robots" content="index, follow">
-
-    <meta name="theme-color" content="#18352f">
-
-    <title>Instituto Antonio Henrique Amaral</title>
-
-    <!--
-        Substitua pelo endereço definitivo do site quando o domínio
-        oficial estiver definido.
-    -->
-    <!-- <link rel="canonical" href="https://www.seudominio.com.br/"> -->
-
-    <style>
-        :root {
-            --primary: #18352f;
-            --primary-light: #285247;
-            --accent: #c49b5b;
-            --accent-dark: #9f773a;
-            --background: #f7f5ef;
-            --surface: #ffffff;
-            --surface-alt: #eee9df;
-            --text: #25302d;
-            --muted: #66716e;
-            --border: rgba(24, 53, 47, 0.14);
-            --shadow: 0 18px 50px rgba(24, 53, 47, 0.10);
-            --radius: 22px;
-            --container: 1180px;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            scroll-padding-top: 95px;
-        }
-
-        body {
-            font-family:
-                Inter,
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                Arial,
-                sans-serif;
-            color: var(--text);
-            background: var(--background);
-            line-height: 1.65;
-        }
-
-        body.menu-open {
-            overflow: hidden;
-        }
-
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        button,
-        input,
-        textarea {
-            font: inherit;
-        }
-
-        img,
-        svg {
-            display: block;
-            max-width: 100%;
-        }
-
-        section {
-            padding: 100px 24px;
-        }
-
-        .container {
-            width: 100%;
-            max-width: var(--container);
-            margin: 0 auto;
-        }
-
-        .eyebrow {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 18px;
-            color: var(--accent-dark);
-            font-size: 0.78rem;
-            font-weight: 800;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-        }
-
-        .eyebrow::before {
-            content: "";
-            width: 30px;
-            height: 2px;
-            background: currentColor;
-        }
-
-        .section-title {
-            max-width: 760px;
-            margin-bottom: 20px;
-            color: var(--primary);
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: clamp(2.1rem, 5vw, 3.7rem);
-            font-weight: 500;
-            line-height: 1.12;
-            letter-spacing: -0.035em;
-        }
-
-        .section-description {
-            max-width: 720px;
-            color: var(--muted);
-            font-size: 1.08rem;
-        }
-
-        .button {
-            min-height: 52px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 13px 22px;
-            border: 1px solid transparent;
-            border-radius: 999px;
-            cursor: pointer;
-            font-weight: 750;
-            transition:
-                transform 0.2s ease,
-                background 0.2s ease,
-                color 0.2s ease,
-                border-color 0.2s ease;
-        }
-
-        .button:hover {
-            transform: translateY(-2px);
-        }
-
-        .button-primary {
-            color: #fff;
-            background: var(--primary);
-        }
-
-        .button-primary:hover {
-            background: var(--primary-light);
-        }
-
-        .button-light {
-            color: var(--primary);
-            background: #fff;
-        }
-
-        .button-outline {
-            color: var(--primary);
-            border-color: var(--border);
-            background: transparent;
-        }
-
-        .button-outline:hover {
-            background: #fff;
-        }
-
-        /* Acessibilidade */
-
-        .skip-link {
-            position: fixed;
-            top: -100px;
-            left: 20px;
-            z-index: 9999;
-            padding: 12px 18px;
-            color: #fff;
-            background: var(--primary);
-            border-radius: 8px;
-        }
-
-        .skip-link:focus {
-            top: 20px;
-        }
-
-        a:focus-visible,
-        button:focus-visible {
-            outline: 3px solid var(--accent);
-            outline-offset: 4px;
-        }
-
-        /* Cabeçalho */
-
-        .site-header {
-            position: fixed;
-            top: 0;
-            right: 0;
-            left: 0;
-            z-index: 1000;
-            background: rgba(247, 245, 239, 0.92);
-            border-bottom: 1px solid transparent;
-            backdrop-filter: blur(15px);
-            transition:
-                border-color 0.2s ease,
-                box-shadow 0.2s ease;
-        }
-
-        .site-header.scrolled {
-            border-color: var(--border);
-            box-shadow: 0 8px 25px rgba(24, 53, 47, 0.06);
-        }
-
-        .header-inner {
-            min-height: 82px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 30px;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 13px;
-            color: var(--primary);
-        }
-
-        .brand-symbol {
-            width: 46px;
-            height: 46px;
-            display: grid;
-            place-items: center;
-            flex: 0 0 auto;
-            color: #fff;
-            background: var(--primary);
-            border-radius: 50%;
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 1.05rem;
-            letter-spacing: -0.06em;
-        }
-
-        .brand-copy {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.15;
-        }
-
-        .brand-copy strong {
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 1.08rem;
-            font-weight: 600;
-        }
-
-        .brand-copy span {
-            margin-top: 3px;
-            color: var(--muted);
-            font-size: 0.72rem;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-        }
-
-        .nav-list {
-            display: flex;
-            align-items: center;
-            gap: 30px;
-            list-style: none;
-        }
-
-        .nav-list a:not(.button) {
-            position: relative;
-            color: #3e4b47;
-            font-size: 0.94rem;
-            font-weight: 650;
-        }
-
-        .nav-list a:not(.button)::after {
-            content: "";
-            position: absolute;
-            right: 0;
-            bottom: -7px;
-            left: 0;
-            height: 2px;
-            background: var(--accent);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.2s ease;
-        }
-
-        .nav-list a:not(.button):hover::after {
-            transform: scaleX(1);
-        }
-
-        .menu-button {
-            width: 46px;
-            height: 46px;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid var(--border);
-            border-radius: 50%;
-            color: var(--primary);
-            background: transparent;
-            cursor: pointer;
-        }
-
-        /* Apresentação */
-
-        .hero {
-            position: relative;
-            min-height: 780px;
-            display: flex;
-            align-items: center;
-            overflow: hidden;
-            padding-top: 180px;
-            padding-bottom: 110px;
-        }
-
-        .hero::before {
-            content: "";
-            position: absolute;
-            top: 80px;
-            right: -180px;
-            width: 590px;
-            height: 590px;
-            border: 1px solid rgba(196, 155, 91, 0.28);
-            border-radius: 50%;
-        }
-
-        .hero::after {
-            content: "";
-            position: absolute;
-            right: 120px;
-            bottom: -280px;
-            width: 600px;
-            height: 600px;
-            background: rgba(196, 155, 91, 0.10);
-            border-radius: 50%;
-            filter: blur(4px);
-        }
-
-        .hero-grid {
-            position: relative;
-            z-index: 1;
-            display: grid;
-            grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
-            align-items: center;
-            gap: 80px;
-        }
-
-        .hero h1 {
-            max-width: 830px;
-            color: var(--primary);
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: clamp(3.2rem, 7vw, 6rem);
-            font-weight: 500;
-            line-height: 0.98;
-            letter-spacing: -0.055em;
-        }
-
-        .hero h1 em {
-            color: var(--accent-dark);
-            font-weight: inherit;
-        }
-
-        .hero-description {
-            max-width: 720px;
-            margin-top: 28px;
-            color: var(--muted);
-            font-size: clamp(1.08rem, 2vw, 1.28rem);
-        }
-
-        .hero-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 13px;
-            margin-top: 34px;
-        }
-
-        .hero-card {
-            position: relative;
-            padding: 38px;
-            color: #fff;
-            background: var(--primary);
-            border-radius: 32px;
-            box-shadow: var(--shadow);
-        }
-
-        .hero-card::before {
-            content: "AH";
-            position: absolute;
-            top: 25px;
-            right: 30px;
-            color: rgba(255, 255, 255, 0.06);
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 7rem;
-            line-height: 1;
-        }
-
-        .hero-card-label {
-            position: relative;
-            z-index: 1;
-            color: #dfc28f;
-            font-size: 0.75rem;
-            font-weight: 800;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-        }
-
-        .hero-card h2 {
-            position: relative;
-            z-index: 1;
-            margin-top: 15px;
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 2rem;
-            font-weight: 500;
-            line-height: 1.2;
-        }
-
-        .hero-card p {
-            position: relative;
-            z-index: 1;
-            margin-top: 18px;
-            color: rgba(255, 255, 255, 0.74);
-        }
-
-        .legal-status {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 28px;
-            padding-top: 22px;
-            border-top: 1px solid rgba(255, 255, 255, 0.14);
-            font-size: 0.92rem;
-        }
-
-        .status-dot {
-            width: 9px;
-            height: 9px;
-            flex: 0 0 auto;
-            background: #7fd39e;
-            border-radius: 50%;
-            box-shadow: 0 0 0 5px rgba(127, 211, 158, 0.12);
-        }
-
-        /* Sobre */
-
-        .about {
-            background: var(--surface);
-        }
-
-        .about-grid {
-            display: grid;
-            grid-template-columns: 0.9fr 1.1fr;
-            align-items: start;
-            gap: 90px;
-        }
-
-        .about-summary {
-            position: sticky;
-            top: 120px;
-        }
-
-        .about-content {
-            display: grid;
-            gap: 24px;
-        }
-
-        .text-card {
-            padding: 30px;
-            background: var(--background);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-        }
-
-        .text-card h3 {
-            margin-bottom: 10px;
-            color: var(--primary);
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 1.4rem;
-            font-weight: 600;
-        }
-
-        .text-card p {
-            color: var(--muted);
-        }
-
-        /* Atuação */
-
-        .activities-header {
-            display: flex;
-            align-items: end;
-            justify-content: space-between;
-            gap: 30px;
-            margin-bottom: 48px;
-        }
-
-        .activity-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-
-        .activity-card {
-            min-height: 310px;
-            display: flex;
-            flex-direction: column;
-            padding: 30px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            transition:
-                transform 0.25s ease,
-                box-shadow 0.25s ease,
-                border-color 0.25s ease;
-        }
-
-        .activity-card:hover {
-            transform: translateY(-6px);
-            border-color: rgba(196, 155, 91, 0.55);
-            box-shadow: var(--shadow);
-        }
-
-        .activity-number {
-            width: 48px;
-            height: 48px;
-            display: grid;
-            place-items: center;
-            margin-bottom: 35px;
-            color: var(--primary);
-            background: var(--surface-alt);
-            border-radius: 50%;
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 1.1rem;
-        }
-
-        .activity-card h3 {
-            margin-bottom: 13px;
-            color: var(--primary);
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 1.45rem;
-            font-weight: 600;
-            line-height: 1.25;
-        }
-
-        .activity-card p {
-            color: var(--muted);
-            font-size: 0.96rem;
-        }
-
-        .activity-note {
-            max-width: 880px;
-            margin-top: 30px;
-            padding: 18px 22px;
-            color: var(--muted);
-            background: rgba(196, 155, 91, 0.10);
-            border-left: 3px solid var(--accent);
-            border-radius: 0 12px 12px 0;
-            font-size: 0.91rem;
-        }
-
-        /* Transparência */
-
-        .transparency {
-            color: #fff;
-            background: var(--primary);
-        }
-
-        .transparency .eyebrow {
-            color: #dfc28f;
-        }
-
-        .transparency .section-title {
-            color: #fff;
-        }
-
-        .transparency .section-description {
-            color: rgba(255, 255, 255, 0.68);
-        }
-
-        .transparency-grid {
-            display: grid;
-            grid-template-columns: 0.8fr 1.2fr;
-            gap: 80px;
-        }
-
-        .registration-card {
-            overflow: hidden;
-            margin-top: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            border-radius: var(--radius);
-        }
-
-        .registration-row {
-            display: grid;
-            grid-template-columns: 190px 1fr;
-            gap: 20px;
-            padding: 19px 22px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.10);
-        }
-
-        .registration-row:last-child {
-            border-bottom: 0;
-        }
-
-        .registration-row dt {
-            color: rgba(255, 255, 255, 0.57);
-            font-size: 0.88rem;
-        }
-
-        .registration-row dd {
-            overflow-wrap: anywhere;
-            font-weight: 650;
-        }
-
-        .cnae-box {
-            margin-top: 30px;
-            padding: 25px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: var(--radius);
-        }
-
-        .cnae-box h3 {
-            margin-bottom: 15px;
-            color: #dfc28f;
-            font-size: 0.83rem;
-            letter-spacing: 0.11em;
-            text-transform: uppercase;
-        }
-
-        .cnae-box p + p {
-            margin-top: 14px;
-        }
-
-        .cnae-box strong {
-            color: #fff;
-        }
-
-        /* Contato */
-
-        .contact {
-            background: var(--surface);
-        }
-
-        .contact-grid {
-            display: grid;
-            grid-template-columns: 0.85fr 1.15fr;
-            gap: 70px;
-        }
-
-        .contact-list {
-            display: grid;
-            gap: 15px;
-            margin-top: 34px;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 16px;
-            padding: 20px;
-            background: var(--background);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-        }
-
-        .contact-icon {
-            width: 42px;
-            height: 42px;
-            display: grid;
-            place-items: center;
-            flex: 0 0 auto;
-            color: #fff;
-            background: var(--primary);
-            border-radius: 50%;
-        }
-
-        .contact-item small {
-            display: block;
-            margin-bottom: 3px;
-            color: var(--muted);
-        }
-
-        .contact-item strong,
-        .contact-item address {
-            color: var(--primary);
-            font-style: normal;
-            font-weight: 700;
-        }
-
-        .contact-item a:hover {
-            color: var(--accent-dark);
-        }
-
-        .map-card {
-            min-height: 480px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 40px;
-            overflow: hidden;
-            color: #fff;
-            background:
-                linear-gradient(
-                    to top,
-                    rgba(24, 53, 47, 1),
-                    rgba(24, 53, 47, 0.58)
-                ),
-                radial-gradient(
-                    circle at 75% 20%,
-                    rgba(196, 155, 91, 0.75),
-                    transparent 32%
-                ),
-                #31594f;
-            border-radius: 30px;
-            box-shadow: var(--shadow);
-        }
-
-        .map-card h3 {
-            max-width: 450px;
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: clamp(2rem, 4vw, 3rem);
-            font-weight: 500;
-            line-height: 1.15;
-        }
-
-        .map-card p {
-            max-width: 480px;
-            margin: 15px 0 25px;
-            color: rgba(255, 255, 255, 0.72);
-        }
-
-        .map-card .button {
-            align-self: flex-start;
-        }
-
-        /* Rodapé */
-
-        .site-footer {
-            padding: 70px 24px 25px;
-            color: rgba(255, 255, 255, 0.72);
-            background: #10241f;
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 1.2fr 0.8fr 0.8fr;
-            gap: 60px;
-            padding-bottom: 50px;
-        }
-
-        .footer-brand {
-            color: #fff;
-        }
-
-        .footer-description {
-            max-width: 430px;
-            margin-top: 20px;
-            font-size: 0.95rem;
-        }
-
-        .footer-title {
-            margin-bottom: 18px;
-            color: #fff;
-            font-size: 0.82rem;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-        }
-
-        .footer-links {
-            display: grid;
-            gap: 11px;
-            list-style: none;
-        }
-
-        .footer-links a:hover {
-            color: #fff;
-        }
-
-        .footer-bottom {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            padding-top: 25px;
-            border-top: 1px solid rgba(255, 255, 255, 0.10);
-            font-size: 0.86rem;
-        }
-
-        /* Responsividade */
-
-        @media (max-width: 980px) {
-            .menu-button {
-                display: flex;
-            }
-
-            .site-nav {
-                position: fixed;
-                top: 82px;
-                right: 0;
-                bottom: 0;
-                left: 0;
-                padding: 30px 24px;
-                visibility: hidden;
-                opacity: 0;
-                background: var(--background);
-                transform: translateY(-10px);
-                transition:
-                    opacity 0.2s ease,
-                    visibility 0.2s ease,
-                    transform 0.2s ease;
-            }
-
-            .site-nav.open {
-                visibility: visible;
-                opacity: 1;
-                transform: translateY(0);
-            }
-
-            .nav-list {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 6px;
-            }
-
-            .nav-list a {
-                display: block;
-                padding: 14px 0;
-            }
-
-            .nav-list .button {
-                margin-top: 10px;
-            }
-
-            .hero-grid,
-            .about-grid,
-            .transparency-grid,
-            .contact-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .hero-grid {
-                gap: 45px;
-            }
-
-            .hero-card {
-                max-width: 600px;
-            }
-
-            .about-grid,
-            .transparency-grid,
-            .contact-grid {
-                gap: 45px;
-            }
-
-            .about-summary {
-                position: static;
-            }
-
-            .activity-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .activities-header {
-                align-items: start;
-                flex-direction: column;
-            }
-
-            .footer-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .footer-grid > div:first-child {
-                grid-column: 1 / -1;
-            }
-        }
-
-        @media (max-width: 650px) {
-            section {
-                padding: 75px 20px;
-            }
-
-            .header-inner {
-                min-height: 74px;
-                padding-right: 20px;
-                padding-left: 20px;
-            }
-
-            .brand-copy span {
-                display: none;
-            }
-
-            .site-nav {
-                top: 74px;
-            }
-
-            .hero {
-                min-height: auto;
-                padding-top: 145px;
-                padding-bottom: 80px;
-            }
-
-            .hero h1 {
-                font-size: clamp(2.8rem, 15vw, 4.2rem);
-            }
-
-            .hero-actions {
-                align-items: stretch;
-                flex-direction: column;
-            }
-
-            .hero-actions .button {
-                width: 100%;
-            }
-
-            .hero-card {
-                padding: 28px;
-                border-radius: 24px;
-            }
-
-            .activity-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .activity-card {
-                min-height: auto;
-            }
-
-            .registration-row {
-                grid-template-columns: 1fr;
-                gap: 5px;
-            }
-
-            .map-card {
-                min-height: 420px;
-                padding: 28px;
-            }
-
-            .footer-grid {
-                grid-template-columns: 1fr;
-                gap: 35px;
-            }
-
-            .footer-grid > div:first-child {
-                grid-column: auto;
-            }
-
-            .footer-bottom {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            html {
-                scroll-behavior: auto;
-            }
-
-            *,
-            *::before,
-            *::after {
-                transition-duration: 0.01ms !important;
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-            }
-        }
-    </style>
-
-    <!-- Dados estruturados da entidade -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Instituto Antonio Henrique Amaral",
-        "taxID": "40.131.145/0001-46",
-        "foundingDate": "2020-11-09",
-        "email": "info@descobriindoseuinterior.com",
-        "telephone": "+55 11 3372-1300",
-        "address": {
-            "@type": "PostalAddress",
-            "streetAddress": "Rua Alfredo Piragibe, 41",
-            "addressLocality": "São Paulo",
-            "addressRegion": "SP",
-            "postalCode": "05447-010",
-            "addressCountry": "BR"
-        }
+<!DOCTYPE html><html lang="en-US"><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Instituto Antonio Henrique Amaral | Culture, Art, Libraries &amp; Archives in Sao Paulo</title>
+  <meta name="description" content="Instituto Antonio Henrique Amaral is a private association in Vila Madalena, Sao Paulo, supporting culture, art, libraries, archives, and access to cultural knowledge.">
+  <meta name="keywords" content="Instituto Antonio Henrique Amaral, culture, art, libraries, archives, cultural organization, Vila Madalena, Sao Paulo, SP">
+  <meta name="author" content="INSTITUTO ANTONIO HENRIQUE AMARAL">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#183c32">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Instituto Antonio Henrique Amaral">
+  <meta property="og:description" content="Preserving culture, encouraging discovery, and connecting communities with art and knowledge.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1564399579883-451a5d44ec08?auto=format&amp;fit=crop&amp;w=1600&amp;q=85">
+  <meta property="og:locale" content="en_US">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Instituto Antonio Henrique Amaral">
+  <meta name="twitter:description" content="A private association supporting culture, art, libraries, and archives in Sao Paulo.">
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23183c32'/%3E%3Cpath d='M19 50h26v-5h-5V19h5v-5H19v5h5v26h-5zM30 19h4v26h-4z' fill='%23e4b85b'/%3E%3C/svg%3E">
+
+  <style>
+    :root {
+      --forest: #183c32;
+      --forest-dark: #102b24;
+      --forest-soft: #2d5d4f;
+      --gold: #d6a84f;
+      --gold-light: #f1d38d;
+      --cream: #f8f4ea;
+      --paper: #fffdf8;
+      --ink: #17201d;
+      --muted: #65706b;
+      --line: rgba(24, 60, 50, 0.14);
+      --white: #ffffff;
+      --shadow: 0 24px 70px rgba(20, 44, 37, 0.12);
+      --shadow-small: 0 12px 35px rgba(20, 44, 37, 0.09);
+      --radius: 24px;
+      --radius-small: 15px;
+      --container: 1180px;
     }
-    </script>
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 90px;
+    }
+
+    body {
+      min-width: 320px;
+      overflow-x: hidden;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body.menu-open,
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 4px;
+    }
+
+    .container {
+      width: min(calc(100% - 40px), var(--container));
+      margin-inline: auto;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      color: var(--forest-soft);
+      font-size: 0.77rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      width: 28px;
+      height: 2px;
+      content: "";
+      background: var(--gold);
+    }
+
+    .eyebrow.light {
+      color: var(--gold-light);
+    }
+
+    .section-heading {
+      max-width: 750px;
+      margin-bottom: 48px;
+    }
+
+    .section-heading.center {
+      margin-inline: auto;
+      text-align: center;
+    }
+
+    .section-heading.center .eyebrow::before {
+      display: none;
+    }
+
+    .section-heading h2 {
+      color: var(--forest-dark);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.25rem, 5vw, 4.2rem);
+      font-weight: 500;
+      letter-spacing: -0.045em;
+      line-height: 1.05;
+    }
+
+    .section-heading p {
+      max-width: 650px;
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: 1.08rem;
+    }
+
+    .section-heading.center p {
+      margin-inline: auto;
+    }
+
+    .btn {
+      display: inline-flex;
+      min-height: 52px;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 0 23px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      font-size: 0.94rem;
+      font-weight: 750;
+      transition: transform 180ms ease, background 180ms ease, color 180ms ease,
+        box-shadow 180ms ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      color: var(--forest-dark);
+      background: var(--gold);
+      box-shadow: 0 12px 28px rgba(214, 168, 79, 0.23);
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-light);
+      box-shadow: 0 16px 32px rgba(214, 168, 79, 0.3);
+    }
+
+    .btn-secondary {
+      border-color: rgba(255, 255, 255, 0.38);
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    .btn-dark {
+      color: var(--white);
+      background: var(--forest);
+    }
+
+    .btn-dark:hover {
+      background: var(--forest-dark);
+      box-shadow: var(--shadow-small);
+    }
+
+    .skip-link {
+      position: fixed;
+      z-index: 9999;
+      top: 12px;
+      left: 12px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      color: var(--white);
+      background: var(--forest-dark);
+      transform: translateY(-150%);
+      transition: transform 180ms ease;
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    /* Header */
+    .site-header {
+      position: fixed;
+      z-index: 1000;
+      top: 0;
+      right: 0;
+      left: 0;
+      border-bottom: 1px solid transparent;
+      transition: background 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+    }
+
+    .site-header.scrolled {
+      border-color: var(--line);
+      background: rgba(255, 253, 248, 0.93);
+      box-shadow: 0 7px 30px rgba(16, 43, 36, 0.07);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav-wrap {
+      display: flex;
+      min-height: 84px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 13px;
+      color: var(--white);
+    }
+
+    .scrolled .brand {
+      color: var(--forest-dark);
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 45px;
+      height: 45px;
+      flex: 0 0 auto;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 13px;
+      color: var(--forest-dark);
+      background: var(--gold);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      box-shadow: 0 7px 18px rgba(0, 0, 0, 0.12);
+    }
+
+    .brand-copy {
+      display: grid;
+      line-height: 1.1;
+    }
+
+    .brand-copy strong {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+
+    .brand-copy span {
+      margin-top: 5px;
+      color: var(--gold-light);
+      font-size: 0.62rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .scrolled .brand-copy span {
+      color: var(--forest-soft);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      padding: 9px 11px;
+      border-radius: 999px;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 0.87rem;
+      font-weight: 700;
+      transition: color 160ms ease, background 160ms ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .scrolled .nav-links a {
+      color: var(--forest);
+    }
+
+    .scrolled .nav-links a:hover {
+      background: rgba(24, 60, 50, 0.08);
+    }
+
+    .nav-cta {
+      margin-left: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.35) !important;
+    }
+
+    .scrolled .nav-cta {
+      border-color: transparent !important;
+      color: var(--forest-dark) !important;
+      background: var(--gold) !important;
+    }
+
+    .menu-toggle {
+      display: none;
+      width: 46px;
+      height: 46px;
+      border: 1px solid rgba(255, 255, 255, 0.26);
+      border-radius: 13px;
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .scrolled .menu-toggle {
+      border-color: var(--line);
+      color: var(--forest);
+      background: var(--cream);
+    }
+
+    .menu-toggle span,
+    .menu-toggle::before,
+    .menu-toggle::after {
+      display: block;
+      width: 20px;
+      height: 2px;
+      margin: 4px auto;
+      content: "";
+      background: currentColor;
+      transition: transform 180ms ease, opacity 180ms ease;
+    }
+
+    .menu-toggle.active span {
+      opacity: 0;
+    }
+
+    .menu-toggle.active::before {
+      transform: translateY(6px) rotate(45deg);
+    }
+
+    .menu-toggle.active::after {
+      transform: translateY(-6px) rotate(-45deg);
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      display: grid;
+      min-height: 810px;
+      align-items: center;
+      overflow: hidden;
+      color: var(--white);
+      background:
+        linear-gradient(90deg, rgba(9, 35, 29, 0.96) 0%, rgba(11, 42, 34, 0.87) 47%, rgba(11, 42, 34, 0.34) 100%),
+        url("https://images.unsplash.com/photo-1564399579883-451a5d44ec08?auto=format&fit=crop&w=2000&q=88")
+        center/cover no-repeat;
+    }
+
+    .hero::before {
+      position: absolute;
+      inset: 0;
+      content: "";
+      opacity: 0.14;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.8) 0.7px, transparent 0.7px);
+      background-size: 22px 22px;
+      mask-image: linear-gradient(to right, black, transparent 70%);
+    }
+
+    .hero::after {
+      position: absolute;
+      right: -10%;
+      bottom: -190px;
+      width: 650px;
+      height: 650px;
+      border: 1px solid rgba(228, 184, 91, 0.23);
+      border-radius: 50%;
+      content: "";
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 760px;
+      padding: 155px 0 110px;
+    }
+
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 25px;
+      padding: 8px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 999px;
+      color: var(--gold-light);
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-kicker::before {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      content: "";
+      background: var(--gold);
+      box-shadow: 0 0 0 5px rgba(214, 168, 79, 0.15);
+    }
+
+    .hero h1 {
+      max-width: 730px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(3.3rem, 7.5vw, 6.7rem);
+      font-weight: 500;
+      letter-spacing: -0.06em;
+      line-height: 0.95;
+    }
+
+    .hero h1 span {
+      color: var(--gold-light);
+      font-style: italic;
+    }
+
+    .hero-description {
+      max-width: 640px;
+      margin-top: 27px;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: clamp(1.05rem, 2vw, 1.22rem);
+      line-height: 1.75;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 13px;
+      margin-top: 35px;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-top: 54px;
+      padding-top: 26px;
+      border-top: 1px solid rgba(255, 255, 255, 0.17);
+    }
+
+    .hero-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      color: rgba(255, 255, 255, 0.76);
+      font-size: 0.88rem;
+    }
+
+    .hero-meta-item svg {
+      width: 20px;
+      color: var(--gold-light);
+    }
+
+    .scroll-cue {
+      position: absolute;
+      z-index: 2;
+      right: 40px;
+      bottom: 42px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: rgba(255, 255, 255, 0.58);
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      transform: rotate(90deg);
+      transform-origin: right center;
+    }
+
+    .scroll-cue::after {
+      width: 55px;
+      height: 1px;
+      content: "";
+      background: var(--gold);
+    }
+
+    /* Intro */
+    .intro-strip {
+      position: relative;
+      z-index: 4;
+      margin-top: -1px;
+      color: var(--white);
+      background: var(--forest);
+    }
+
+    .intro-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .intro-item {
+      position: relative;
+      padding: 32px 34px;
+      border-right: 1px solid rgba(255, 255, 255, 0.13);
+    }
+
+    .intro-item:last-child {
+      border-right: 0;
+    }
+
+    .intro-item span {
+      color: var(--gold-light);
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .intro-item strong {
+      display: block;
+      margin-top: 7px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+
+    /* About */
+    .about {
+      padding: 120px 0;
+      overflow: hidden;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 0.93fr 1.07fr;
+      align-items: center;
+      gap: clamp(55px, 8vw, 110px);
+    }
+
+    .about-visual {
+      position: relative;
+      min-height: 590px;
+    }
+
+    .about-main-image {
+      width: 87%;
+      height: 540px;
+      object-fit: cover;
+      border-radius: 180px 180px 28px 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .about-detail-image {
+      position: absolute;
+      right: 0;
+      bottom: -20px;
+      width: 47%;
+      height: 245px;
+      object-fit: cover;
+      border: 9px solid var(--paper);
+      border-radius: 22px;
+      box-shadow: var(--shadow-small);
+    }
+
+    .about-badge {
+      position: absolute;
+      top: 38px;
+      right: 4px;
+      display: grid;
+      width: 130px;
+      height: 130px;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 50%;
+      color: var(--white);
+      background: var(--forest);
+      box-shadow: var(--shadow-small);
+      text-align: center;
+    }
+
+    .about-badge strong {
+      display: block;
+      color: var(--gold-light);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.45rem;
+    }
+
+    .about-badge span {
+      display: block;
+      max-width: 85px;
+      margin-inline: auto;
+      font-size: 0.68rem;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .about-copy h2 {
+      color: var(--forest-dark);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.5rem, 5vw, 4.65rem);
+      font-weight: 500;
+      letter-spacing: -0.05em;
+      line-height: 1.02;
+    }
+
+    .about-copy > p {
+      margin-top: 23px;
+      color: var(--muted);
+      font-size: 1.07rem;
+    }
+
+    .mission-box {
+      margin-top: 30px;
+      padding: 23px 25px;
+      border-left: 4px solid var(--gold);
+      border-radius: 0 var(--radius-small) var(--radius-small) 0;
+      background: var(--cream);
+    }
+
+    .mission-box strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--forest);
+    }
+
+    .mission-box p {
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    .about-points {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-top: 27px;
+    }
+
+    .about-point {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--forest-dark);
+      font-size: 0.91rem;
+      font-weight: 750;
+    }
+
+    .check {
+      display: grid;
+      width: 27px;
+      height: 27px;
+      flex: 0 0 auto;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--forest-dark);
+      background: var(--gold-light);
+      font-size: 0.8rem;
+    }
+
+    /* Services */
+    .services {
+      padding: 115px 0;
+      background: var(--cream);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .service-card {
+      position: relative;
+      min-height: 480px;
+      overflow: hidden;
+      border-radius: var(--radius);
+      color: var(--white);
+      box-shadow: var(--shadow-small);
+      isolation: isolate;
+    }
+
+    .service-card img {
+      position: absolute;
+      z-index: -2;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+
+    .service-card::after {
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      content: "";
+      background: linear-gradient(to top, rgba(9, 32, 27, 0.97), rgba(9, 32, 27, 0.08) 70%);
+      transition: background 300ms ease;
+    }
+
+    .service-card:hover img {
+      transform: scale(1.07);
+    }
+
+    .service-card:hover::after {
+      background: linear-gradient(to top, rgba(9, 32, 27, 0.99), rgba(9, 32, 27, 0.16) 80%);
+    }
+
+    .service-number {
+      position: absolute;
+      top: 23px;
+      right: 23px;
+      display: grid;
+      width: 45px;
+      height: 45px;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 50%;
+      background: rgba(11, 42, 34, 0.34);
+      font-family: Georgia, "Times New Roman", serif;
+      backdrop-filter: blur(10px);
+    }
+
+    .service-content {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      padding: 32px;
+    }
+
+    .service-content h3 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.65rem;
+      font-weight: 500;
+    }
+
+    .service-content p {
+      margin-top: 10px;
+      color: rgba(255, 255, 255, 0.73);
+      font-size: 0.93rem;
+    }
+
+    /* Feature split */
+    .feature {
+      color: var(--white);
+      background: var(--forest-dark);
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 670px;
+    }
+
+    .feature-image {
+      min-height: 610px;
+      background:
+        linear-gradient(rgba(16, 43, 36, 0.1), rgba(16, 43, 36, 0.1)),
+        url("https://images.unsplash.com/photo-1561214115-f2f134cc4912?auto=format&fit=crop&w=1400&q=86")
+        center/cover no-repeat;
+    }
+
+    .feature-content {
+      display: flex;
+      align-items: center;
+      padding: 80px clamp(35px, 7vw, 100px);
+    }
+
+    .feature-content h2 {
+      max-width: 620px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 500;
+      letter-spacing: -0.05em;
+      line-height: 1.03;
+    }
+
+    .feature-content > div > p {
+      max-width: 600px;
+      margin-top: 22px;
+      color: rgba(255, 255, 255, 0.68);
+    }
+
+    .feature-list {
+      display: grid;
+      gap: 23px;
+      margin-top: 36px;
+    }
+
+    .feature-item {
+      display: grid;
+      grid-template-columns: 50px 1fr;
+      gap: 17px;
+    }
+
+    .feature-icon {
+      display: grid;
+      width: 50px;
+      height: 50px;
+      place-items: center;
+      border: 1px solid rgba(228, 184, 91, 0.28);
+      border-radius: 15px;
+      color: var(--gold-light);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .feature-icon svg {
+      width: 23px;
+    }
+
+    .feature-item h3 {
+      color: var(--white);
+      font-size: 1rem;
+    }
+
+    .feature-item p {
+      margin-top: 3px;
+      color: rgba(255, 255, 255, 0.61);
+      font-size: 0.9rem;
+    }
+
+    /* Testimonials */
+    .testimonials {
+      position: relative;
+      padding: 115px 0;
+      overflow: hidden;
+    }
+
+    .testimonials::before {
+      position: absolute;
+      top: 30px;
+      left: -100px;
+      width: 330px;
+      height: 330px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      content: "";
+    }
+
+    .quote-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .quote-card {
+      position: relative;
+      padding: 35px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: 0 10px 45px rgba(16, 43, 36, 0.055);
+      transition: transform 200ms ease, box-shadow 200ms ease;
+    }
+
+    .quote-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-small);
+    }
+
+    .quote-mark {
+      color: var(--gold);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 4rem;
+      line-height: 0.7;
+    }
+
+    .quote-card blockquote {
+      min-height: 145px;
+      margin-top: 22px;
+      color: var(--forest-dark);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.18rem;
+      line-height: 1.55;
+    }
+
+    .quote-source {
+      margin-top: 23px;
+      padding-top: 19px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 750;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    /* FAQ */
+    .faq {
+      padding: 115px 0;
+      background: var(--cream);
+    }
+
+    .faq-layout {
+      display: grid;
+      grid-template-columns: 0.78fr 1.22fr;
+      gap: clamp(45px, 8vw, 100px);
+    }
+
+    .faq-intro {
+      position: sticky;
+      top: 120px;
+      align-self: start;
+    }
+
+    .faq-intro h2 {
+      color: var(--forest-dark);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.45rem, 5vw, 4.3rem);
+      font-weight: 500;
+      letter-spacing: -0.05em;
+      line-height: 1.03;
+    }
+
+    .faq-intro p {
+      margin-top: 20px;
+      color: var(--muted);
+    }
+
+    .faq-intro .btn {
+      margin-top: 28px;
+    }
+
+    .accordion {
+      border-top: 1px solid rgba(24, 60, 50, 0.2);
+    }
+
+    .faq-item {
+      border-bottom: 1px solid rgba(24, 60, 50, 0.2);
+    }
+
+    .faq-question {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 25px 0;
+      border: 0;
+      color: var(--forest-dark);
+      background: transparent;
+      text-align: left;
+      font-size: 1.05rem;
+      font-weight: 750;
+    }
+
+    .faq-question span:last-child {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      flex: 0 0 auto;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: var(--forest);
+      background: var(--paper);
+      font-size: 1.3rem;
+      font-weight: 400;
+      transition: transform 200ms ease, color 200ms ease, background 200ms ease;
+    }
+
+    .faq-item.active .faq-question span:last-child {
+      color: var(--white);
+      background: var(--forest);
+      transform: rotate(45deg);
+    }
+
+    .faq-answer {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 280ms ease;
+    }
+
+    .faq-answer > div {
+      overflow: hidden;
+    }
+
+    .faq-answer p {
+      max-width: 700px;
+      padding: 0 55px 25px 0;
+      color: var(--muted);
+    }
+
+    .faq-item.active .faq-answer {
+      grid-template-rows: 1fr;
+    }
+
+    /* Contact */
+    .contact {
+      padding: 115px 0;
+    }
+
+    .contact-shell {
+      overflow: hidden;
+      border-radius: 30px;
+      background: var(--forest);
+      box-shadow: var(--shadow);
+    }
+
+    .contact-top {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+    }
+
+    .contact-copy {
+      padding: clamp(45px, 7vw, 85px);
+      color: var(--white);
+    }
+
+    .contact-copy h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.5rem, 5vw, 4.2rem);
+      font-weight: 500;
+      letter-spacing: -0.05em;
+      line-height: 1.03;
+    }
+
+    .contact-copy > p {
+      margin-top: 20px;
+      color: rgba(255, 255, 255, 0.68);
+    }
+
+    .contact-details {
+      display: grid;
+      gap: 21px;
+      margin-top: 37px;
+    }
+
+    .contact-detail {
+      display: grid;
+      grid-template-columns: 43px 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .contact-detail-icon {
+      display: grid;
+      width: 43px;
+      height: 43px;
+      place-items: center;
+      border-radius: 13px;
+      color: var(--forest-dark);
+      background: var(--gold);
+    }
+
+    .contact-detail-icon svg {
+      width: 20px;
+    }
+
+    .contact-detail span {
+      display: block;
+      color: var(--gold-light);
+      font-size: 0.69rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .contact-detail address,
+    .contact-detail a {
+      display: inline-block;
+      margin-top: 3px;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 0.94rem;
+      font-style: normal;
+      transition: color 160ms ease;
+    }
+
+    .contact-detail a:hover {
+      color: var(--gold-light);
+    }
+
+    .contact-form-wrap {
+      padding: clamp(35px, 6vw, 70px);
+      background: var(--white);
+    }
+
+    .contact-form-wrap h3 {
+      color: var(--forest-dark);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 2rem;
+      font-weight: 500;
+    }
+
+    .contact-form-wrap > p {
+      margin: 7px 0 25px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 17px;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    .field label {
+      color: var(--forest-dark);
+      font-size: 0.81rem;
+      font-weight: 800;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      border: 1px solid rgba(24, 60, 50, 0.18);
+      border-radius: 12px;
+      color: var(--ink);
+      background: var(--paper);
+      outline: none;
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    .field input,
+    .field select {
+      height: 49px;
+      padding: 0 15px;
+    }
+
+    .field textarea {
+      min-height: 125px;
+      padding: 13px 15px;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 4px rgba(214, 168, 79, 0.13);
+    }
+
+    .form-note {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 0.76rem;
+    }
+
+    .form-note a {
+      color: var(--forest);
+      font-weight: 750;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .form-submit {
+      margin-top: 20px;
+      border: 0;
+    }
+
+    .form-message {
+      display: none;
+      margin-top: 17px;
+      padding: 13px 15px;
+      border: 1px solid rgba(45, 93, 79, 0.18);
+      border-radius: 11px;
+      color: var(--forest);
+      background: #edf6f1;
+      font-size: 0.88rem;
+    }
+
+    .map-wrap {
+      height: 390px;
+      border-top: 5px solid var(--gold);
+      background: #dfe6df;
+    }
+
+    .map-wrap iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    /* Footer */
+    .footer {
+      color: rgba(255, 255, 255, 0.74);
+      background: #0a211b;
+    }
+
+    .footer-main {
+      display: grid;
+      grid-template-columns: 1.25fr 0.7fr 1.05fr;
+      gap: 60px;
+      padding: 75px 0 55px;
+    }
+
+    .footer-brand .brand {
+      color: var(--white);
+    }
+
+    .footer-brand p {
+      max-width: 430px;
+      margin-top: 22px;
+      font-size: 0.9rem;
+    }
+
+    .footer h3 {
+      margin-bottom: 20px;
+      color: var(--gold-light);
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .footer-links {
+      display: grid;
+      gap: 10px;
+      list-style: none;
+    }
+
+    .footer-links a,
+    .footer-legal button {
+      border: 0;
+      color: rgba(255, 255, 255, 0.73);
+      background: transparent;
+      font-size: 0.88rem;
+      text-align: left;
+      transition: color 160ms ease;
+    }
+
+    .footer-links a:hover,
+    .footer-legal button:hover {
+      color: var(--gold-light);
+    }
+
+    .official-records {
+      display: grid;
+      gap: 11px;
+      font-size: 0.84rem;
+    }
+
+    .official-records strong {
+      display: block;
+      color: rgba(255, 255, 255, 0.94);
+      font-weight: 700;
+    }
+
+    .official-records address {
+      font-style: normal;
+    }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 25px;
+      padding: 23px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.11);
+      font-size: 0.78rem;
+    }
+
+    .footer-legal {
+      display: flex;
+      gap: 22px;
+    }
+
+    /* Legal modal */
+    .legal-modal {
+      position: fixed;
+      z-index: 3000;
+      inset: 0;
+      display: grid;
+      visibility: hidden;
+      place-items: center;
+      padding: 25px;
+      background: rgba(5, 20, 16, 0.77);
+      opacity: 0;
+      backdrop-filter: blur(8px);
+      transition: opacity 180ms ease, visibility 180ms ease;
+    }
+
+    .legal-modal.open {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .legal-panel {
+      width: min(900px, 100%);
+      max-height: min(88vh, 900px);
+      overflow: hidden;
+      border-radius: 23px;
+      background: var(--paper);
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.35);
+      transform: translateY(18px);
+      transition: transform 220ms ease;
+    }
+
+    .legal-modal.open .legal-panel {
+      transform: translateY(0);
+    }
+
+    .legal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 25px;
+      padding: 22px 28px;
+      color: var(--white);
+      background: var(--forest);
+    }
+
+    .legal-head h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.7rem;
+      font-weight: 500;
+    }
+
+    .legal-close {
+      display: grid;
+      width: 40px;
+      height: 40px;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 50%;
+      color: var(--white);
+      background: transparent;
+      font-size: 1.4rem;
+    }
+
+    .legal-body {
+      max-height: calc(88vh - 84px);
+      overflow-y: auto;
+      padding: 35px clamp(24px, 6vw, 60px) 55px;
+    }
+
+    .legal-body h3 {
+      margin: 30px 0 9px;
+      color: var(--forest-dark);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.35rem;
+      font-weight: 600;
+    }
+
+    .legal-body h3:first-of-type {
+      margin-top: 12px;
+    }
+
+    .legal-body p,
+    .legal-body li {
+      color: #4e5c57;
+      font-size: 0.93rem;
+    }
+
+    .legal-body ul {
+      margin: 10px 0 0 20px;
+    }
+
+    .legal-body li + li {
+      margin-top: 6px;
+    }
+
+    .legal-body a {
+      color: var(--forest);
+      font-weight: 700;
+      text-decoration: underline;
+    }
+
+    .legal-updated {
+      display: inline-block;
+      margin-bottom: 15px;
+      padding: 6px 10px;
+      border-radius: 7px;
+      color: var(--forest);
+      background: var(--cream);
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    /* Reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 650ms ease, transform 650ms ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 1020px) {
+      .menu-toggle {
+        display: block;
+      }
+
+      .nav-links {
+        position: fixed;
+        top: 84px;
+        right: 20px;
+        left: 20px;
+        display: grid;
+        visibility: hidden;
+        gap: 4px;
+        padding: 18px;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: rgba(255, 253, 248, 0.98);
+        box-shadow: var(--shadow);
+        opacity: 0;
+        transform: translateY(-15px);
+        transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease;
+      }
+
+      .nav-links.open {
+        visibility: visible;
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .nav-links a,
+      .scrolled .nav-links a {
+        display: block;
+        padding: 13px 14px;
+        color: var(--forest);
+      }
+
+      .nav-cta {
+        margin: 5px 0 0;
+        color: var(--forest-dark) !important;
+        background: var(--gold) !important;
+        text-align: center;
+      }
+
+      .about-grid,
+      .faq-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .about-grid {
+        gap: 70px;
+      }
+
+      .about-visual {
+        max-width: 650px;
+      }
+
+      .services-grid,
+      .quote-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .service-card:last-child,
+      .quote-card:last-child {
+        grid-column: 1 / -1;
+      }
+
+      .quote-card blockquote {
+        min-height: auto;
+      }
+
+      .feature-grid {
+        grid-template-columns: 0.85fr 1.15fr;
+      }
+
+      .faq-intro {
+        position: static;
+      }
+
+      .contact-top {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-main {
+        grid-template-columns: 1.1fr 0.7fr;
+      }
+
+      .footer-records {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .container {
+        width: min(calc(100% - 28px), var(--container));
+      }
+
+      .nav-wrap {
+        min-height: 74px;
+      }
+
+      .nav-links {
+        top: 74px;
+        right: 14px;
+        left: 14px;
+      }
+
+      .brand-copy strong {
+        max-width: 190px;
+        font-size: 0.87rem;
+      }
+
+      .brand-copy span {
+        display: none;
+      }
+
+      .brand-mark {
+        width: 41px;
+        height: 41px;
+      }
+
+      .hero {
+        min-height: 760px;
+        background-position: 63% center;
+      }
+
+      .hero-content {
+        padding: 130px 0 90px;
+      }
+
+      .hero h1 {
+        font-size: clamp(3.1rem, 15vw, 5rem);
+      }
+
+      .hero-actions {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .hero-actions .btn {
+        width: 100%;
+      }
+
+      .hero-meta {
+        display: grid;
+        gap: 14px;
+        margin-top: 38px;
+      }
+
+      .scroll-cue {
+        display: none;
+      }
+
+      .intro-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .intro-item {
+        padding: 22px 10px;
+        border-right: 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .intro-item:last-child {
+        border-bottom: 0;
+      }
+
+      .about,
+      .services,
+      .testimonials,
+      .faq,
+      .contact {
+        padding: 85px 0;
+      }
+
+      .about-visual {
+        min-height: 470px;
+      }
+
+      .about-main-image {
+        width: 90%;
+        height: 425px;
+      }
+
+      .about-detail-image {
+        width: 52%;
+        height: 190px;
+      }
+
+      .about-badge {
+        top: 28px;
+        width: 104px;
+        height: 104px;
+      }
+
+      .about-badge strong {
+        font-size: 1.2rem;
+      }
+
+      .about-badge span {
+        font-size: 0.59rem;
+      }
+
+      .about-points,
+      .services-grid,
+      .quote-grid,
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .service-card:last-child,
+      .quote-card:last-child {
+        grid-column: auto;
+      }
+
+      .service-card {
+        min-height: 420px;
+      }
+
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .feature-image {
+        min-height: 440px;
+      }
+
+      .feature-content {
+        padding: 70px 24px;
+      }
+
+      .contact-shell {
+        border-radius: 22px;
+      }
+
+      .contact-copy,
+      .contact-form-wrap {
+        padding: 40px 24px;
+      }
+
+      .map-wrap {
+        height: 330px;
+      }
+
+      .footer-main {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding-top: 60px;
+      }
+
+      .footer-records {
+        grid-column: auto;
+      }
+
+      .footer-bottom {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .footer-legal {
+        flex-wrap: wrap;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
 </head>
 
 <body>
-    <a class="skip-link" href="#conteudo">
-        Ir para o conteúdo
-    </a>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
 
-    <header class="site-header" id="inicio">
-        <div class="container header-inner">
-            <a href="#inicio" class="brand" aria-label="Instituto Antonio Henrique Amaral — início">
-                <span class="brand-symbol" aria-hidden="true">AH</span>
+  <header class="site-header" id="siteHeader">
+    <div class="container nav-wrap">
+      <a class="brand" href="#home" aria-label="Instituto Antonio Henrique Amaral home">
+        <span class="brand-mark" aria-hidden="true">I</span>
+        <span class="brand-copy">
+          <strong>Instituto Antonio Henrique Amaral</strong>
+          <span>Culture · Art · Knowledge</span>
+        </span>
+      </a>
 
-                <span class="brand-copy">
-                    <strong>Instituto Antonio Henrique Amaral</strong>
-                    <span>Cultura, arte, bibliotecas e arquivos</span>
-                </span>
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation" aria-expanded="false">
+        <span></span>
+      </button>
+
+      <nav aria-label="Primary navigation">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#about">About</a></li>
+          <li><a href="#services">Our Work</a></li>
+          <li><a href="#why-us">Why Us</a></li>
+          <li><a href="#testimonials">Community</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a class="nav-cta" href="#contact">Contact Us</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="hero" id="home" aria-labelledby="hero-title">
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-kicker">Based in Vila Madalena, Sao Paulo</div>
+          <h1 id="hero-title">Culture lives when it is <span>shared.</span></h1>
+          <p class="hero-description">
+            Instituto Antonio Henrique Amaral supports meaningful connections with culture,
+            art, libraries, and archives—helping knowledge remain accessible, relevant, and
+            valued across generations.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#about">
+              Discover Our Purpose
+              <span aria-hidden="true">→</span>
             </a>
+            <a class="btn btn-secondary" href="#contact">
+              Get in Touch
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
 
-            <button class="menu-button" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="site-menu">
-                <span aria-hidden="true">☰</span>
-            </button>
-
-            <nav class="site-nav" id="site-menu" aria-label="Navegação principal">
-                <ul class="nav-list">
-                    <li><a href="#sobre">O Instituto</a></li>
-                    <li><a href="#atuacao">Áreas de atuação</a></li>
-                    <li><a href="#transparencia">Transparência</a></li>
-                    <li>
-                        <a class="button button-primary" href="#contato">
-                            Entre em contato
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+          <div class="hero-meta" aria-label="Organization overview">
+            <div class="hero-meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                <path d="M12 21s7-4.5 7-11a7 7 0 1 0-14 0c0 6.5 7 11 7 11Z"></path>
+                <circle cx="12" cy="10" r="2.3"></circle>
+              </svg>
+              Vila Madalena, Sao Paulo
+            </div>
+            <div class="hero-meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                <path d="M4 19.5V6.8A2.8 2.8 0 0 1 6.8 4H20v15.5H6.5A2.5 2.5 0 0 0 4 22"></path>
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              </svg>
+              Libraries &amp; Archives
+            </div>
+            <div class="hero-meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                <path d="M12 3 3 8l9 5 9-5-9-5Z"></path>
+                <path d="m3 12 9 5 9-5M3 16l9 5 9-5"></path>
+              </svg>
+              Culture &amp; Art
+            </div>
+          </div>
         </div>
-    </header>
+      </div>
+      <div class="scroll-cue" aria-hidden="true">Explore</div>
+    </section>
 
-    <main id="conteudo">
-        <section class="hero" aria-labelledby="hero-title">
-            <div class="container hero-grid">
-                <div>
-                    <span class="eyebrow">
-                        Associação privada fundada em 2020
-                    </span>
+    <section class="intro-strip" aria-label="Core focus">
+      <div class="container intro-grid">
+        <div class="intro-item">
+          <span>Our Focus</span>
+          <strong>Culture and Art</strong>
+        </div>
+        <div class="intro-item">
+          <span>Our Resources</span>
+          <strong>Libraries and Archives</strong>
+        </div>
+        <div class="intro-item">
+          <span>Our Community</span>
+          <strong>Vila Madalena, Sao Paulo</strong>
+        </div>
+      </div>
+    </section>
 
-                    <h1 id="hero-title">
-                        Cultura e memória como parte do nosso
-                        <em>patrimônio coletivo.</em>
-                    </h1>
-
-                    <p class="hero-description">
-                        O Instituto Antonio Henrique Amaral é uma associação
-                        privada sediada em São Paulo, com atuação registrada
-                        nas áreas de cultura, arte, bibliotecas, documentação
-                        e arquivos.
-                    </p>
-
-                    <div class="hero-actions">
-                        <a class="button button-primary" href="#sobre">
-                            Conheça o Instituto
-                            <span aria-hidden="true">→</span>
-                        </a>
-
-                        <a class="button button-outline" href="#transparencia">
-                            Dados institucionais
-                        </a>
-                    </div>
-                </div>
-
-                <aside class="hero-card" aria-label="Informações institucionais">
-                    <span class="hero-card-label">Identidade institucional</span>
-
-                    <h2>
-                        Instituto Antonio Henrique Amaral
-                    </h2>
-
-                    <p>
-                        Entidade formalmente registrada no Brasil como
-                        associação privada, com sede no município de
-                        São Paulo.
-                    </p>
-
-                    <div class="legal-status">
-                        <span class="status-dot" aria-hidden="true"></span>
-                        Situação cadastral informada: ativa
-                    </div>
-                </aside>
+    <section class="about" id="about">
+      <div class="container about-grid">
+        <div class="about-visual reveal">
+          <img class="about-main-image" src="https://images.unsplash.com/photo-1544967082-d9d25d867d66?auto=format&amp;fit=crop&amp;w=1100&amp;q=86" alt="Curated artwork displayed in a contemporary cultural space" loading="lazy">
+          <img class="about-detail-image" src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&amp;fit=crop&amp;w=700&amp;q=86" alt="Library shelves holding an extensive collection of books" loading="lazy">
+          <div class="about-badge" aria-label="Established in 2020">
+            <div>
+              <strong>2020</strong>
+              <span>Established in Sao Paulo</span>
             </div>
-        </section>
+          </div>
+        </div>
 
-        <section class="about" id="sobre">
-            <div class="container about-grid">
-                <div class="about-summary">
-                    <span class="eyebrow">O Instituto</span>
+        <div class="about-copy reveal">
+          <span class="eyebrow">About the Institute</span>
+          <h2>Preserving creative knowledge with care and purpose.</h2>
+          <p>
+            INSTITUTO ANTONIO HENRIQUE AMARAL is a private association whose registered
+            activities include cultural and artistic organizations, libraries, and archives.
+            From our home in Vila Madalena, we value the role that cultural resources play in
+            education, research, reflection, and community life.
+          </p>
+          <p>
+            Our approach is thoughtful and collaborative. We recognize that art, records, and
+            collections are more than objects: they are points of connection between people,
+            ideas, history, and the future.
+          </p>
 
-                    <h2 class="section-title">
-                        Uma organização ligada à cultura, à arte e à memória.
-                    </h2>
+          <div class="mission-box">
+            <strong>Our purpose</strong>
+            <p>
+              To encourage meaningful engagement with cultural and artistic knowledge while
+              supporting responsible access to library and archival resources.
+            </p>
+          </div>
 
-                    <p class="section-description">
-                        A estrutura institucional do Instituto está vinculada
-                        a atividades associativas culturais e artísticas,
-                        bibliotecas, documentação e arquivos.
-                    </p>
-                </div>
+          <div class="about-points" aria-label="Organizational values">
+            <div class="about-point"><span class="check">✓</span> Cultural stewardship</div>
+            <div class="about-point"><span class="check">✓</span> Thoughtful access</div>
+            <div class="about-point"><span class="check">✓</span> Community connection</div>
+            <div class="about-point"><span class="check">✓</span> Responsible preservation</div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-                <div class="about-content">
-                    <article class="text-card">
-                        <h3>Quem somos</h3>
+    <section class="services" id="services">
+      <div class="container">
+        <div class="section-heading center reveal">
+          <span class="eyebrow">Our Areas of Work</span>
+          <h2>Where culture, memory, and discovery meet.</h2>
+          <p>
+            Our registered areas of activity reflect a commitment to cultural organizations
+            and to the lasting value of libraries and archives.
+          </p>
+        </div>
 
-                        <p>
-                            O Instituto Antonio Henrique Amaral é uma
-                            associação privada brasileira constituída em
-                            9 de novembro de 2020. Sua sede está localizada
-                            no bairro Vila Madalena, em São Paulo.
-                        </p>
-                    </article>
-
-                    <article class="text-card">
-                        <h3>Atuação institucional</h3>
-
-                        <p>
-                            Conforme seus registros cadastrais, o Instituto
-                            está ligado a atividades de organizações
-                            associativas relacionadas à cultura e à arte,
-                            além de atividades de bibliotecas e arquivos.
-                        </p>
-                    </article>
-
-                    <article class="text-card">
-                        <h3>Informação e documentação</h3>
-
-                        <p>
-                            As atividades registradas abrangem áreas como
-                            documentação, pesquisa bibliográfica, catalogação
-                            de coleções, recuperação de informações e
-                            armazenamento de materiais documentais.
-                        </p>
-                    </article>
-                </div>
+        <div class="services-grid">
+          <article class="service-card reveal">
+            <img src="https://images.unsplash.com/photo-1561214115-6e39b6f28292?auto=format&amp;fit=crop&amp;w=900&amp;q=86" alt="Visitors viewing paintings in an art gallery" loading="lazy">
+            <span class="service-number">01</span>
+            <div class="service-content">
+              <h3>Culture &amp; Art</h3>
+              <p>
+                Supporting engagement with artistic ideas, cultural expression, and the
+                knowledge created through the arts.
+              </p>
             </div>
-        </section>
+          </article>
 
-        <section id="atuacao">
-            <div class="container">
-                <div class="activities-header">
-                    <div>
-                        <span class="eyebrow">Áreas registradas</span>
-
-                        <h2 class="section-title">
-                            Cultura, documentação e preservação da informação.
-                        </h2>
-                    </div>
-
-                    <p class="section-description">
-                        As áreas abaixo refletem as atividades econômicas
-                        informadas no cadastro da entidade.
-                    </p>
-                </div>
-
-                <div class="activity-grid">
-                    <article class="activity-card">
-                        <span class="activity-number" aria-hidden="true">01</span>
-
-                        <h3>Cultura e arte</h3>
-
-                        <p>
-                            Atividades de organização associativa ligadas aos
-                            segmentos cultural e artístico, conforme o CNAE
-                            principal registrado pelo Instituto.
-                        </p>
-                    </article>
-
-                    <article class="activity-card">
-                        <span class="activity-number" aria-hidden="true">02</span>
-
-                        <h3>Bibliotecas e arquivos</h3>
-
-                        <p>
-                            Atividades relacionadas a bibliotecas, salas de
-                            leitura, documentação, arquivos e organização
-                            de materiais informativos.
-                        </p>
-                    </article>
-
-                    <article class="activity-card">
-                        <span class="activity-number" aria-hidden="true">03</span>
-
-                        <h3>Catalogação de coleções</h3>
-
-                        <p>
-                            Organização, identificação e catalogação de
-                            coleções de livros, documentos, periódicos,
-                            fotografias, filmes e obras.
-                        </p>
-                    </article>
-
-                    <article class="activity-card">
-                        <span class="activity-number" aria-hidden="true">04</span>
-
-                        <h3>Documentação e pesquisa</h3>
-
-                        <p>
-                            Áreas relacionadas à documentação, à pesquisa
-                            bibliográfica e à localização de informações
-                            em bibliotecas e arquivos.
-                        </p>
-                    </article>
-
-                    <article class="activity-card">
-                        <span class="activity-number" aria-hidden="true">05</span>
-
-                        <h3>Recuperação de informação</h3>
-
-                        <p>
-                            Busca e recuperação de informações em coleções
-                            documentais, bibliotecas ou arquivos organizados.
-                        </p>
-                    </article>
-
-                    <article class="activity-card">
-                        <span class="activity-number" aria-hidden="true">06</span>
-
-                        <h3>Armazenamento documental</h3>
-
-                        <p>
-                            Atividades relacionadas ao armazenamento de
-                            livros, mapas, periódicos, fotografias, filmes,
-                            obras de arte e outros materiais.
-                        </p>
-                    </article>
-                </div>
-
-                <p class="activity-note">
-                    <strong>Nota de transparência:</strong>
-                    esta seção apresenta as áreas abrangidas pelos CNAEs
-                    informados. A disponibilidade de projetos, atendimento
-                    ao público ou serviços específicos deve ser confirmada
-                    diretamente com o Instituto.
-                </p>
+          <article class="service-card reveal">
+            <img src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&amp;fit=crop&amp;w=900&amp;q=86" alt="Large library interior filled with books" loading="lazy">
+            <span class="service-number">02</span>
+            <div class="service-content">
+              <h3>Library Resources</h3>
+              <p>
+                Encouraging organized access to books, reference materials, and resources that
+                contribute to learning and research.
+              </p>
             </div>
-        </section>
+          </article>
 
-        <section class="transparency" id="transparencia">
-            <div class="container transparency-grid">
-                <div>
-                    <span class="eyebrow">Transparência</span>
-
-                    <h2 class="section-title">
-                        Informações oficiais da entidade.
-                    </h2>
-
-                    <p class="section-description">
-                        Consulte os principais dados cadastrais e de registro
-                        do Instituto Antonio Henrique Amaral.
-                    </p>
-                </div>
-
-                <div>
-                    <dl class="registration-card">
-                        <div class="registration-row">
-                            <dt>Razão social</dt>
-                            <dd>Instituto Antonio Henrique Amaral</dd>
-                        </div>
-
-                        <div class="registration-row">
-                            <dt>CNPJ</dt>
-                            <dd>40.131.145/0001-46</dd>
-                        </div>
-
-                        <div class="registration-row">
-                            <dt>Natureza jurídica</dt>
-                            <dd>Associação Privada</dd>
-                        </div>
-
-                        <div class="registration-row">
-                            <dt>Data de abertura</dt>
-                            <dd>9 de novembro de 2020</dd>
-                        </div>
-
-                        <div class="registration-row">
-                            <dt>Tipo de estabelecimento</dt>
-                            <dd>Matriz</dd>
-                        </div>
-
-                        <div class="registration-row">
-                            <dt>Situação cadastral informada</dt>
-                            <dd>Ativa</dd>
-                        </div>
-
-                        <div class="registration-row">
-                            <dt>Inscrição Estadual — SP</dt>
-                            <dd>130.275.426.115</dd>
-                        </div>
-
-                        <div class="registration-row">
-                            <dt>Opção pelo MEI</dt>
-                            <dd>Não</dd>
-                        </div>
-
-                        <div class="registration-row">
-                            <dt>Opção pelo Simples Nacional</dt>
-                            <dd>Não</dd>
-                        </div>
-                    </dl>
-
-                    <div class="cnae-box">
-                        <h3>Atividades econômicas informadas</h3>
-
-                        <p>
-                            <strong>CNAE principal — 94.93-6-00:</strong>
-                            atividades de organizações associativas ligadas
-                            à cultura e à arte.
-                        </p>
-
-                        <p>
-                            <strong>CNAE secundário — 91.01-5-00:</strong>
-                            atividades de bibliotecas e arquivos.
-                        </p>
-                    </div>
-                </div>
+          <article class="service-card reveal">
+            <img src="https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&amp;fit=crop&amp;w=900&amp;q=86" alt="Open archival books and historical documents" loading="lazy">
+            <span class="service-number">03</span>
+            <div class="service-content">
+              <h3>Archives &amp; Memory</h3>
+              <p>
+                Recognizing the importance of records, documentation, and archival materials
+                in preserving cultural memory.
+              </p>
             </div>
-        </section>
+          </article>
+        </div>
+      </div>
+    </section>
 
-        <section class="contact" id="contato">
-            <div class="container contact-grid">
+    <section class="feature" id="why-us">
+      <div class="feature-grid">
+        <div class="feature-image" role="img" aria-label="A refined contemporary art gallery"></div>
+
+        <div class="feature-content">
+          <div class="reveal">
+            <span class="eyebrow light">Why Choose Us</span>
+            <h2>A considered approach to cultural stewardship.</h2>
+            <p>
+              We believe responsible cultural work begins with respect: respect for original
+              materials, for creative voices, for historical context, and for the people who
+              seek to learn from them.
+            </p>
+
+            <div class="feature-list">
+              <div class="feature-item">
+                <div class="feature-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                    <path d="M12 3 4 7v5c0 5.2 3.4 8 8 9 4.6-1 8-3.8 8-9V7l-8-4Z"></path>
+                    <path d="m9 12 2 2 4-4"></path>
+                  </svg>
+                </div>
                 <div>
-                    <span class="eyebrow">Contato</span>
-
-                    <h2 class="section-title">
-                        Fale com o Instituto.
-                    </h2>
-
-                    <p class="section-description">
-                        Para informações institucionais, entre em contato
-                        pelos canais apresentados abaixo.
-                    </p>
-
-                    <div class="contact-list">
-                        <div class="contact-item">
-                            <span class="contact-icon" aria-hidden="true">✉</span>
-
-                            <div>
-                                <small>E-mail</small>
-
-                                <strong>
-                                    <a href="mailto:info@descobriindoseuinterior.com">
-                                        info@descobriindoseuinterior.com
-                                    </a>
-                                </strong>
-                            </div>
-                        </div>
-
-                        <div class="contact-item">
-                            <span class="contact-icon" aria-hidden="true">☎</span>
-
-                            <div>
-                                <small>Telefone</small>
-
-                                <strong>
-                                    <a href="tel:+551133721300">
-                                        (11) 3372-1300
-                                    </a>
-                                </strong>
-                            </div>
-                        </div>
-
-                        <div class="contact-item">
-                            <span class="contact-icon" aria-hidden="true">⌖</span>
-
-                            <div>
-                                <small>Endereço</small>
-
-                                <address>
-                                    Rua Alfredo Piragibe, 41<br>
-                                    Vila Madalena — São Paulo/SP<br>
-                                    CEP 05447-010
-                                </address>
-                            </div>
-                        </div>
-                    </div>
+                  <h3>Responsible Practice</h3>
+                  <p>Careful attention to cultural value, context, and long-term stewardship.</p>
                 </div>
+              </div>
 
-                <div class="map-card">
-                    <h3>
-                        Sede localizada em São Paulo.
-                    </h3>
-
-                    <p>
-                        Rua Alfredo Piragibe, 41, Vila Madalena,
-                        São Paulo — SP, CEP 05447-010.
-                    </p>
-
-                    <a class="button button-light" href="https://www.google.com/maps/search/?api=1&amp;query=Rua+Alfredo+Piragibe+41+Vila+Madalena+São+Paulo+SP+05447-010" target="_blank" rel="noopener noreferrer">
-                        Ver localização no mapa
-                        <span aria-hidden="true">↗</span>
-                    </a>
+              <div class="feature-item">
+                <div class="feature-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                    <circle cx="12" cy="12" r="9"></circle>
+                    <path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"></path>
+                  </svg>
                 </div>
+                <div>
+                  <h3>Broader Connection</h3>
+                  <p>Building bridges among art, information, cultural memory, and community.</p>
+                </div>
+              </div>
+
+              <div class="feature-item">
+                <div class="feature-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                    <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v17H6.5A2.5 2.5 0 0 0 4 22V5.5Z"></path>
+                    <path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v17h4.5A2.5 2.5 0 0 1 20 22V5.5Z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3>Knowledge-Oriented</h3>
+                  <p>Supporting discovery through libraries, archives, and cultural resources.</p>
+                </div>
+              </div>
+
+              <div class="feature-item">
+                <div class="feature-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3>Community-Minded</h3>
+                  <p>Welcoming thoughtful conversations and opportunities for collaboration.</p>
+                </div>
+              </div>
             </div>
-        </section>
-    </main>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <footer class="site-footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div>
-                    <a href="#inicio" class="brand footer-brand">
-                        <span class="brand-symbol" aria-hidden="true">AH</span>
+    <section class="testimonials" id="testimonials">
+      <div class="container">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Community Perspectives</span>
+          <h2>Why cultural institutions matter.</h2>
+          <p>
+            These statements reflect the values that guide our work and the role cultural
+            resources can play in a thriving community.
+          </p>
+        </div>
 
-                        <span class="brand-copy">
-                            <strong>Instituto Antonio Henrique Amaral</strong>
-                            <span>Cultura, arte, bibliotecas e arquivos</span>
-                        </span>
-                    </a>
+        <div class="quote-grid">
+          <article class="quote-card reveal">
+            <div class="quote-mark" aria-hidden="true">“</div>
+            <blockquote>
+              Accessible collections create opportunities to learn, revisit history, and see
+              familiar ideas through a new lens.
+            </blockquote>
+            <div class="quote-source">On access and discovery</div>
+          </article>
 
-                    <p class="footer-description">
-                        Associação privada brasileira sediada em São Paulo,
-                        com atividades registradas nas áreas de cultura,
-                        arte, bibliotecas e arquivos.
-                    </p>
-                </div>
+          <article class="quote-card reveal">
+            <div class="quote-mark" aria-hidden="true">“</div>
+            <blockquote>
+              Preserving cultural records protects more than the past—it gives future
+              generations a stronger foundation for understanding.
+            </blockquote>
+            <div class="quote-source">On preservation</div>
+          </article>
 
-                <div>
-                    <h2 class="footer-title">Navegação</h2>
+          <article class="quote-card reveal">
+            <div class="quote-mark" aria-hidden="true">“</div>
+            <blockquote>
+              Art and knowledge bring people together by encouraging curiosity, conversation,
+              reflection, and shared experience.
+            </blockquote>
+            <div class="quote-source">On cultural connection</div>
+          </article>
+        </div>
+      </div>
+    </section>
 
-                    <ul class="footer-links">
-                        <li><a href="#sobre">O Instituto</a></li>
-                        <li><a href="#atuacao">Áreas de atuação</a></li>
-                        <li><a href="#transparencia">Transparência</a></li>
-                        <li><a href="#contato">Contato</a></li>
-                    </ul>
-                </div>
+    <section class="faq" id="faq">
+      <div class="container faq-layout">
+        <div class="faq-intro reveal">
+          <span class="eyebrow">Frequently Asked Questions</span>
+          <h2>Helpful information about the Institute.</h2>
+          <p>
+            Learn more about our organization, registered activities, location, and how to
+            contact us.
+          </p>
+          <a class="btn btn-dark" href="#contact">Ask a Question</a>
+        </div>
 
-                <div>
-                    <h2 class="footer-title">Dados legais</h2>
-
-                    <ul class="footer-links">
-                        <li>CNPJ: 40.131.145/0001-46</li>
-                        <li>Associação Privada</li>
-                        <li>São Paulo — SP</li>
-
-                        <!--
-                            Publique as páginas antes de habilitar estes links.
-
-                            <li>
-                                <a href="/politica-de-privacidade">
-                                    Política de Privacidade
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="/termos-de-uso">
-                                    Termos de Uso
-                                </a>
-                            </li>
-                        -->
-                    </ul>
-                </div>
-            </div>
-
-            <div class="footer-bottom">
+        <div class="accordion reveal">
+          <article class="faq-item active">
+            <h3>
+              <button class="faq-question" type="button" aria-expanded="true">
+                <span>What is Instituto Antonio Henrique Amaral?</span>
+                <span aria-hidden="true">+</span>
+              </button>
+            </h3>
+            <div class="faq-answer">
+              <div>
                 <p>
-                    © <span id="current-year"></span>
-                    Instituto Antonio Henrique Amaral.
+                  INSTITUTO ANTONIO HENRIQUE AMARAL is registered as a private association.
+                  Its primary registered activity concerns organizations connected with culture
+                  and art, with an additional registered activity related to libraries and archives.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <article class="faq-item">
+            <h3>
+              <button class="faq-question" type="button" aria-expanded="false">
+                <span>Where is the Institute located?</span>
+                <span aria-hidden="true">+</span>
+              </button>
+            </h3>
+            <div class="faq-answer">
+              <div>
+                <p>
+                  The Institute is located at R ALFREDO PIRAGIBE, 41, VILA MADALENA, SAO PAULO,
+                  SP, 05.447-010.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <article class="faq-item">
+            <h3>
+              <button class="faq-question" type="button" aria-expanded="false">
+                <span>What areas does the organization focus on?</span>
+                <span aria-hidden="true">+</span>
+              </button>
+            </h3>
+            <div class="faq-answer">
+              <div>
+                <p>
+                  The Institute's registered activities encompass cultural and artistic
+                  organizations, as well as library and archival activities. Specific inquiries
+                  may be directed to the Institute using the contact information below.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <article class="faq-item">
+            <h3>
+              <button class="faq-question" type="button" aria-expanded="false">
+                <span>How can I contact the Institute?</span>
+                <span aria-hidden="true">+</span>
+              </button>
+            </h3>
+            <div class="faq-answer">
+              <div>
+                <p>
+                  You may call (11) 3722-1300, email MV4_@ME.COM, or use the inquiry form on
+                  this website.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <article class="faq-item">
+            <h3>
+              <button class="faq-question" type="button" aria-expanded="false">
+                <span>Can I propose a cultural collaboration?</span>
+                <span aria-hidden="true">+</span>
+              </button>
+            </h3>
+            <div class="faq-answer">
+              <div>
+                <p>
+                  You are welcome to send a clear description of your proposal, its cultural
+                  purpose, expected timeline, and relevant contact information. Submitting a
+                  proposal does not guarantee acceptance or participation.
+                </p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact" id="contact">
+      <div class="container">
+        <div class="section-heading center reveal">
+          <span class="eyebrow">Contact</span>
+          <h2>Start a thoughtful conversation.</h2>
+          <p>
+            Contact the Institute with a general inquiry, a research-related question, or a
+            cultural collaboration proposal.
+          </p>
+        </div>
+
+        <div class="contact-shell reveal">
+          <div class="contact-top">
+            <div class="contact-copy">
+              <span class="eyebrow light">Visit or Contact Us</span>
+              <h2>Connect with the Institute.</h2>
+              <p>
+                Please use the details below or complete the inquiry form. We welcome clear,
+                relevant messages related to our areas of activity.
+              </p>
+
+              <div class="contact-details">
+                <div class="contact-detail">
+                  <div class="contact-detail-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                      <path d="M12 21s7-4.5 7-11a7 7 0 1 0-14 0c0 6.5 7 11 7 11Z"></path>
+                      <circle cx="12" cy="10" r="2.3"></circle>
+                    </svg>
+                  </div>
+                  <div>
+                    <span>Address</span>
+                    <address>R ALFREDO PIRAGIBE, 41, VILA MADALENA, SAO PAULO, SP, 05.447-010</address>
+                  </div>
+                </div>
+
+                <div class="contact-detail">
+                  <div class="contact-detail-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                      <path d="M22 16.9v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.63a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0 1 22 16.9Z"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <span>Phone</span>
+                    <a href="tel:+551137221300">(11) 3722-1300</a>
+                  </div>
+                </div>
+
+                <div class="contact-detail">
+                  <div class="contact-detail-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                      <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                      <path d="m3 7 9 6 9-6"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <span>Email</span>
+                    <a href="mailto:MV4_@ME.COM">MV4_@ME.COM</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="contact-form-wrap">
+              <h3>Send an inquiry</h3>
+              <p>Complete the form and your email application will prepare your message.</p>
+
+              <form id="contactForm">
+                <div class="form-grid">
+                  <div class="field">
+                    <label for="name">Full name</label>
+                    <input id="name" name="name" type="text" autocomplete="name" required="">
+                  </div>
+
+                  <div class="field">
+                    <label for="email">Email address</label>
+                    <input id="email" name="email" type="email" autocomplete="email" required="">
+                  </div>
+
+                  <div class="field full">
+                    <label for="subject">Reason for contacting us</label>
+                    <select id="subject" name="subject" required="">
+                      <option value="">Select a topic</option>
+                      <option>General inquiry</option>
+                      <option>Culture or art inquiry</option>
+                      <option>Library or archive inquiry</option>
+                      <option>Collaboration proposal</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+
+                  <div class="field full">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" required=""></textarea>
+                  </div>
+                </div>
+
+                <p class="form-note">
+                  By submitting this form, you acknowledge our
+                  <a href="#privacy" data-legal="privacy">Privacy Policy</a>.
                 </p>
 
-                <p>Todos os direitos reservados.</p>
+                <button class="btn btn-dark form-submit" type="submit">
+                  Prepare Email <span aria-hidden="true">→</span>
+                </button>
+
+                <div class="form-message" id="formMessage" role="status">
+                  Your email application is being opened. If it does not open, email us directly
+                  at MV4_@ME.COM.
+                </div>
+              </form>
             </div>
+          </div>
+
+          <div class="map-wrap">
+            <iframe title="Map showing Instituto Antonio Henrique Amaral" src="https://www.google.com/maps?q=R%20ALFREDO%20PIRAGIBE%2C%2041%2C%20VILA%20MADALENA%2C%20SAO%20PAULO%2C%20SP%2C%2005.447-010&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen="">
+            </iframe>
+          </div>
         </div>
-    </footer>
+      </div>
+    </section>
+  </main>
 
-    <script>
-        const header = document.querySelector(".site-header");
-        const menuButton = document.querySelector(".menu-button");
-        const navigation = document.querySelector(".site-nav");
-        const navigationLinks = document.querySelectorAll(".site-nav a");
-        const currentYear = document.querySelector("#current-year");
+  <footer class="footer">
+    <div class="container footer-main">
+      <div class="footer-brand">
+        <a class="brand" href="#home">
+          <span class="brand-mark" aria-hidden="true">I</span>
+          <span class="brand-copy">
+            <strong>Instituto Antonio Henrique Amaral</strong>
+            <span>Culture · Art · Knowledge</span>
+          </span>
+        </a>
+        <p>
+          A private association supporting activities connected with culture, art, libraries,
+          archives, and the preservation of knowledge.
+        </p>
+      </div>
 
-        currentYear.textContent = new Date().getFullYear();
+      <div>
+        <h3>Explore</h3>
+        <ul class="footer-links">
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#services">Our Work</a></li>
+          <li><a href="#why-us">Why Choose Us</a></li>
+          <li><a href="#faq">Frequently Asked Questions</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
 
-        function updateHeader() {
-            header.classList.toggle("scrolled", window.scrollY > 15);
+      <div class="footer-records">
+        <h3>Official Business Information</h3>
+        <div class="official-records">
+          <div>
+            Legal Business Name
+            <strong>INSTITUTO ANTONIO HENRIQUE AMARAL</strong>
+          </div>
+          <div>
+            CNPJ
+            <strong>40.131.145/0001-46</strong>
+          </div>
+          <div>
+            Full Business Address
+            <strong>
+              <address>R ALFREDO PIRAGIBE, 41, VILA MADALENA, SAO PAULO, SP, 05.447-010</address>
+            </strong>
+          </div>
+          <div>
+            Phone
+            <strong><a href="tel:+551137221300">(11) 3722-1300</a></strong>
+          </div>
+          <div>
+            Email
+            <strong><a href="mailto:MV4_@ME.COM">MV4_@ME.COM</a></strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <p>© 2026 INSTITUTO ANTONIO HENRIQUE AMARAL. All rights reserved.</p>
+      <div class="footer-legal">
+        <button type="button" data-legal="privacy">Privacy Policy</button>
+        <button type="button" data-legal="terms">Terms of Service</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Privacy Policy -->
+  <div class="legal-modal" id="privacyModal" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
+    <div class="legal-panel">
+      <div class="legal-head">
+        <h2 id="privacyTitle">Privacy Policy</h2>
+        <button class="legal-close" type="button" aria-label="Close Privacy Policy">×</button>
+      </div>
+
+      <div class="legal-body">
+        <span class="legal-updated">Effective November 1, 2026</span>
+
+        <p>
+          This Privacy Policy explains how INSTITUTO ANTONIO HENRIQUE AMARAL
+          (“the Institute,” “we,” “us,” or “our”) may collect, use, retain, and protect
+          information when you visit this website or contact us. The Institute is located at
+          R ALFREDO PIRAGIBE, 41, VILA MADALENA, SAO PAULO, SP, 05.447-010.
+        </p>
+
+        <h3>1. Information We Collect</h3>
+        <p>Depending on how you interact with us, we may collect:</p>
+        <ul>
+          <li>Contact information, such as your name and email address.</li>
+          <li>The content of messages, inquiries, proposals, or other communications you send.</li>
+          <li>Basic technical data, such as browser type, device type, IP address, referring page, and approximate location, if collected by our hosting or security providers.</li>
+          <li>Records reasonably necessary to respond to your inquiry and maintain organizational communications.</li>
+        </ul>
+
+        <h3>2. How We Use Information</h3>
+        <p>We may use information to:</p>
+        <ul>
+          <li>Respond to questions, requests, and proposals.</li>
+          <li>Operate, secure, troubleshoot, and improve this website.</li>
+          <li>Maintain appropriate administrative and communication records.</li>
+          <li>Prevent fraud, misuse, security incidents, and unlawful activity.</li>
+          <li>Comply with applicable legal, regulatory, accounting, or reporting obligations.</li>
+        </ul>
+
+        <h3>3. Legal Bases and Applicable Privacy Law</h3>
+        <p>
+          Because the Institute is established in Brazil, personal data may be processed under
+          Brazil’s Lei Geral de Proteção de Dados Pessoais (LGPD), Law No. 13,709/2018, where
+          applicable. Depending on the circumstances, processing may be based on consent,
+          performance of requested steps, compliance with legal obligations, the exercise of
+          rights, or legitimate interests that do not override your rights.
+        </p>
+        <p>
+          If you are located in the United States, applicable federal or state privacy laws may
+          provide additional rights. California residents may have rights under the California
+          Consumer Privacy Act, as amended by the California Privacy Rights Act (CCPA/CPRA),
+          if and to the extent that the law applies to the Institute. The Institute does not
+          represent that it meets the statutory thresholds that make every U.S. state privacy
+          law applicable.
+        </p>
+
+        <h3>4. Cookies and Similar Technologies</h3>
+        <p>
+          This website may use essential browser storage or similar technologies needed for
+          functionality, accessibility, security, or user preferences. Third-party content,
+          including an embedded Google Map, may be provided by services that collect technical
+          information or use cookies under their own policies. You may control many cookies
+          through your browser settings, although disabling them can affect functionality.
+        </p>
+
+        <h3>5. Google Maps</h3>
+        <p>
+          The contact section includes Google Maps content. When you load or interact with the
+          map, Google may receive information such as your IP address, browser details, device
+          identifiers, and interaction data. Google processes that information under its own
+          privacy terms. We do not control Google’s independent data practices.
+        </p>
+
+        <h3>6. Sharing and Disclosure</h3>
+        <p>
+          We do not sell personal information for money. We may disclose information to hosting,
+          security, technical, communications, legal, accounting, or other service providers
+          that support our operations. We may also disclose information when required by law,
+          to protect legal rights, to investigate misuse, or in connection with an organizational
+          restructuring or transfer.
+        </p>
+
+        <h3>7. International Processing</h3>
+        <p>
+          Information may be processed in Brazil or in other countries where our service
+          providers operate. Data protection rules in those locations may differ from those
+          where you live. Where required, we use appropriate measures for international
+          transfers.
+        </p>
+
+        <h3>8. Retention</h3>
+        <p>
+          We retain personal information only for as long as reasonably necessary for the
+          purpose for which it was collected, to maintain appropriate records, resolve disputes,
+          protect our rights, and satisfy legal obligations. Retention periods vary according
+          to the type and context of the information.
+        </p>
+
+        <h3>9. Security</h3>
+        <p>
+          We use reasonable administrative, organizational, and technical safeguards designed
+          to protect information. No website, email service, network, or storage system can be
+          guaranteed to be completely secure, and we cannot promise absolute security.
+        </p>
+
+        <h3>10. Your Privacy Rights</h3>
+        <p>
+          Subject to applicable law and relevant exceptions, you may have the right to request
+          access, confirmation of processing, correction, deletion, anonymization, portability,
+          information about sharing, restriction, or withdrawal of consent. You may also have
+          the right to object to certain processing or request review of certain automated
+          decisions.
+        </p>
+        <p>
+          U.S. residents may also have rights to know, correct, delete, or obtain a copy of
+          certain personal information and to opt out of certain sales, sharing, targeted
+          advertising, or profiling where applicable. We will not unlawfully discriminate
+          against an individual for exercising an applicable privacy right.
+        </p>
+
+        <h3>11. Children’s Privacy</h3>
+        <p>
+          This general informational website is not directed to children under 13, and we do
+          not knowingly collect personal information online from children under 13. If you
+          believe a child has provided personal information, please contact us so the matter
+          can be reviewed.
+        </p>
+
+        <h3>12. External Links</h3>
+        <p>
+          Links or embedded services may lead to websites operated by third parties. Their
+          privacy and security practices are governed by their own policies, not this policy.
+        </p>
+
+        <h3>13. Policy Changes</h3>
+        <p>
+          We may revise this Privacy Policy as practices, services, or laws change. A revised
+          policy becomes effective when posted with its updated effective date.
+        </p>
+
+        <h3>14. Contact Us</h3>
+        <p>
+          Privacy requests and questions may be sent to
+          <a href="mailto:MV4_@ME.COM">MV4_@ME.COM</a>, by telephone at
+          <a href="tel:+551137221300">(11) 3722-1300</a>, or by mail to:
+          INSTITUTO ANTONIO HENRIQUE AMARAL, R ALFREDO PIRAGIBE, 41, VILA MADALENA,
+          SAO PAULO, SP, 05.447-010.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Terms of Service -->
+  <div class="legal-modal" id="termsModal" role="dialog" aria-modal="true" aria-labelledby="termsTitle">
+    <div class="legal-panel">
+      <div class="legal-head">
+        <h2 id="termsTitle">Terms of Service</h2>
+        <button class="legal-close" type="button" aria-label="Close Terms of Service">×</button>
+      </div>
+
+      <div class="legal-body">
+        <span class="legal-updated">Effective November 1, 2026</span>
+
+        <p>
+          These Terms of Service (“Terms”) govern your access to and use of this website
+          operated by INSTITUTO ANTONIO HENRIQUE AMARAL (“the Institute,” “we,” “us,” or
+          “our”). By accessing or using this website, you agree to these Terms. If you do not
+          agree, do not use the website.
+        </p>
+
+        <h3>1. Informational Purpose</h3>
+        <p>
+          This website provides general information about the Institute, its registered areas
+          of activity, and methods of contact. Website content does not constitute legal,
+          financial, historical, appraisal, conservation, archival, or other professional advice.
+        </p>
+
+        <h3>2. No Guarantee of Services or Participation</h3>
+        <p>
+          Sending an inquiry, proposal, request, or other communication does not create a
+          contract, partnership, agency relationship, fiduciary relationship, commitment, or
+          obligation. We may accept, decline, prioritize, or discontinue communications and
+          proposals at our discretion, subject to applicable law.
+        </p>
+
+        <h3>3. Permitted Use</h3>
+        <p>You may use this website only for lawful, personal, and informational purposes. You may not:</p>
+        <ul>
+          <li>Interfere with the website’s security, availability, operation, or integrity.</li>
+          <li>Attempt to obtain unauthorized access to systems, accounts, or data.</li>
+          <li>Transmit malware, malicious code, spam, or deceptive communications.</li>
+          <li>Use automated tools to scrape or extract content in a manner that burdens the website or violates applicable law.</li>
+          <li>Impersonate another person or misrepresent your affiliation.</li>
+          <li>Use website content in a way that infringes intellectual property, privacy, or other legal rights.</li>
+        </ul>
+
+        <h3>4. Intellectual Property</h3>
+        <p>
+          Unless otherwise stated, the website’s original design, text, graphics, arrangement,
+          and branding are owned by or licensed to the Institute and are protected by applicable
+          intellectual property laws. Third-party photographs, map content, names, marks, and
+          other materials remain the property of their respective owners.
+        </p>
+        <p>
+          You may view and print reasonable portions of this website for personal,
+          noncommercial reference. No other license is granted. You may not reproduce,
+          publish, modify, sell, distribute, or commercially exploit protected content without
+          permission from the relevant rights holder.
+        </p>
+
+        <h3>5. User Communications</h3>
+        <p>
+          You represent that information you submit is accurate and that you have the right to
+          provide it. Do not send confidential, legally privileged, highly sensitive, or
+          security-critical information through the general inquiry form. You grant us
+          permission to use your communication as reasonably necessary to review it, respond,
+          maintain records, and protect our legal interests.
+        </p>
+
+        <h3>6. Third-Party Services and Links</h3>
+        <p>
+          This website may display or link to services operated by third parties, including
+          Google Maps. We do not control and are not responsible for third-party content,
+          availability, security, terms, products, or privacy practices. Access to third-party
+          services is at your own discretion and may be governed by separate terms.
+        </p>
+
+        <h3>7. Accuracy and Availability</h3>
+        <p>
+          We seek to present useful and accurate information but do not warrant that every
+          item is complete, current, uninterrupted, error-free, or suitable for a particular
+          purpose. We may update, remove, suspend, or discontinue website content or
+          functionality without notice.
+        </p>
+
+        <h3>8. Disclaimer of Warranties</h3>
+        <p>
+          To the fullest extent permitted by applicable law, this website is provided “as is”
+          and “as available,” without warranties of any kind, whether express, implied, or
+          statutory, including implied warranties of merchantability, fitness for a particular
+          purpose, title, noninfringement, security, or uninterrupted availability.
+        </p>
+
+        <h3>9. Limitation of Liability</h3>
+        <p>
+          To the fullest extent permitted by applicable law, the Institute and its
+          representatives will not be liable for indirect, incidental, special, exemplary,
+          punitive, or consequential damages, lost data, lost opportunities, or lost profits
+          arising from or related to use of, inability to use, or reliance on this website.
+          Nothing in these Terms excludes liability that cannot lawfully be excluded.
+        </p>
+
+        <h3>10. Indemnification</h3>
+        <p>
+          To the extent permitted by law, you agree to indemnify and hold the Institute harmless
+          from claims, liabilities, damages, and reasonable expenses arising from your unlawful
+          use of the website, your violation of these Terms, or your infringement of another
+          person’s rights.
+        </p>
+
+        <h3>11. Privacy</h3>
+        <p>
+          Our collection and handling of personal information through this website are described
+          in the Privacy Policy. The Privacy Policy is incorporated into these Terms by reference.
+        </p>
+
+        <h3>12. Governing Law and Jurisdiction</h3>
+        <p>
+          These Terms are governed by the applicable laws of the Federative Republic of Brazil,
+          without regard to conflict-of-law principles. Subject to any mandatory consumer or
+          jurisdictional protections, disputes relating to these Terms or the website will be
+          submitted to the competent courts serving Sao Paulo, SP, Brazil.
+        </p>
+
+        <h3>13. Changes to These Terms</h3>
+        <p>
+          We may revise these Terms from time to time. Updated Terms become effective when
+          posted with a revised effective date. Continued use after an update constitutes
+          acceptance to the extent permitted by law.
+        </p>
+
+        <h3>14. Severability and Waiver</h3>
+        <p>
+          If any provision is found unenforceable, the remaining provisions remain in effect.
+          A failure to enforce a provision is not a waiver of the right to enforce it later.
+        </p>
+
+        <h3>15. Contact Information</h3>
+        <p>
+          Questions about these Terms may be directed to
+          <a href="mailto:MV4_@ME.COM">MV4_@ME.COM</a>, by telephone at
+          <a href="tel:+551137221300">(11) 3722-1300</a>, or by mail to:
+          INSTITUTO ANTONIO HENRIQUE AMARAL, R ALFREDO PIRAGIBE, 41, VILA MADALENA,
+          SAO PAULO, SP, 05.447-010. CNPJ: 40.131.145/0001-46.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const header = document.getElementById("siteHeader");
+      const menuToggle = document.getElementById("menuToggle");
+      const navLinks = document.getElementById("navLinks");
+      const contactForm = document.getElementById("contactForm");
+      const formMessage = document.getElementById("formMessage");
+      let lastFocusedElement = null;
+
+      function updateHeader() {
+        header.classList.toggle("scrolled", window.scrollY > 25);
+      }
+
+      updateHeader();
+      window.addEventListener("scroll", updateHeader, { passive: true });
+
+      menuToggle.addEventListener("click", () => {
+        const isOpen = navLinks.classList.toggle("open");
+        menuToggle.classList.toggle("active", isOpen);
+        menuToggle.setAttribute("aria-expanded", String(isOpen));
+        menuToggle.setAttribute("aria-label", isOpen ? "Close navigation" : "Open navigation");
+        document.body.classList.toggle("menu-open", isOpen);
+      });
+
+      navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          navLinks.classList.remove("open");
+          menuToggle.classList.remove("active");
+          menuToggle.setAttribute("aria-expanded", "false");
+          menuToggle.setAttribute("aria-label", "Open navigation");
+          document.body.classList.remove("menu-open");
+        });
+      });
+
+      document.querySelectorAll(".faq-question").forEach((button) => {
+        button.addEventListener("click", () => {
+          const item = button.closest(".faq-item");
+          const wasActive = item.classList.contains("active");
+
+          document.querySelectorAll(".faq-item").forEach((faqItem) => {
+            faqItem.classList.remove("active");
+            faqItem.querySelector(".faq-question").setAttribute("aria-expanded", "false");
+          });
+
+          if (!wasActive) {
+            item.classList.add("active");
+            button.setAttribute("aria-expanded", "true");
+          }
+        });
+      });
+
+      const revealElements = document.querySelectorAll(".reveal");
+
+      if ("IntersectionObserver" in window) {
+        const revealObserver = new IntersectionObserver(
+          (entries, observer) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.12 }
+        );
+
+        revealElements.forEach((element) => revealObserver.observe(element));
+      } else {
+        revealElements.forEach((element) => element.classList.add("visible"));
+      }
+
+      function openModal(type) {
+        const modal = document.getElementById(type + "Modal");
+        if (!modal) return;
+
+        lastFocusedElement = document.activeElement;
+        modal.classList.add("open");
+        document.body.classList.add("modal-open");
+        modal.querySelector(".legal-close").focus();
+
+        if (history.replaceState) {
+          history.replaceState(null, "", "#" + type);
+        }
+      }
+
+      function closeModal(modal) {
+        modal.classList.remove("open");
+        document.body.classList.remove("modal-open");
+
+        if (history.replaceState && ["#privacy", "#terms"].includes(window.location.hash)) {
+          history.replaceState(null, "", window.location.pathname + window.location.search);
         }
 
-        function closeMenu() {
-            navigation.classList.remove("open");
-            document.body.classList.remove("menu-open");
-            menuButton.setAttribute("aria-expanded", "false");
-            menuButton.setAttribute("aria-label", "Abrir menu");
-            menuButton.querySelector("span").textContent = "☰";
+        if (lastFocusedElement) lastFocusedElement.focus();
+      }
+
+      document.querySelectorAll("[data-legal]").forEach((trigger) => {
+        trigger.addEventListener("click", (event) => {
+          event.preventDefault();
+          openModal(trigger.dataset.legal);
+        });
+      });
+
+      document.querySelectorAll(".legal-modal").forEach((modal) => {
+        modal.querySelector(".legal-close").addEventListener("click", () => closeModal(modal));
+
+        modal.addEventListener("click", (event) => {
+          if (event.target === modal) closeModal(modal);
+        });
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          const openModalElement = document.querySelector(".legal-modal.open");
+          if (openModalElement) closeModal(openModalElement);
+        }
+      });
+
+      if (window.location.hash === "#privacy") openModal("privacy");
+      if (window.location.hash === "#terms") openModal("terms");
+
+      contactForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        if (!contactForm.checkValidity()) {
+          contactForm.reportValidity();
+          return;
         }
 
-        menuButton.addEventListener("click", function () {
-            const isOpen = navigation.classList.toggle("open");
+        const formData = new FormData(contactForm);
+        const name = formData.get("name");
+        const email = formData.get("email");
+        const subject = formData.get("subject");
+        const message = formData.get("message");
 
-            document.body.classList.toggle("menu-open", isOpen);
-            menuButton.setAttribute("aria-expanded", String(isOpen));
-            menuButton.setAttribute(
-                "aria-label",
-                isOpen ? "Fechar menu" : "Abrir menu"
-            );
+        const emailSubject = encodeURIComponent("Website Inquiry: " + subject);
+        const emailBody = encodeURIComponent(
+          "Name: " + name + "\n" +
+          "Email: " + email + "\n" +
+          "Topic: " + subject + "\n\n" +
+          "Message:\n" + message
+        );
 
-            menuButton.querySelector("span").textContent = isOpen
-                ? "×"
-                : "☰";
-        });
-
-        navigationLinks.forEach(function (link) {
-            link.addEventListener("click", closeMenu);
-        });
-
-        window.addEventListener("scroll", updateHeader, {
-            passive: true
-        });
-
-        window.addEventListener("resize", function () {
-            if (window.innerWidth > 980) {
-                closeMenu();
-            }
-        });
-
-        updateHeader();
-    </script>
+        formMessage.style.display = "block";
+        window.location.href =
+          "mailto:MV4_@ME.COM?subject=" + emailSubject + "&body=" + emailBody;
+      });
+    })();
+  </script>
 
 
 </body></html>
