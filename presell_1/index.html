@@ -171,15 +171,17 @@
 
   <div class="card">
 
-   <a href="https://descobriindoseuinterior.online/vsl_2/"> <div class="img-wrap">
+   <a href="https://descobriindoseuinterior.online/vsl_2/">
+    <div class="img-wrap">
       <img
         class="hero-img"
         src="des1.png"
         alt="Nossa Senhora Desatadora dos Nós"
         onerror="this.outerHTML='<div class=\'hero-fallback\'>🙏</div>'"
       />
-      <div class="img-overlay"></div></a>
+      <div class="img-overlay"></div>
     </div>
+   </a>
 
     <div class="divider-wrap">
       <div class="divider-line"></div>
@@ -222,9 +224,11 @@
     (function () {
       var params = window.location.search;
       if (!params) return;
-      var btn = document.getElementById('cta-btn');
-      var base = btn.href;
-      btn.href = base + (base.indexOf('?') !== -1 ? '&' : '?') + params.slice(1);
+      var links = document.querySelectorAll('a[href*="/vsl_2/"]');
+      for (var i = 0; i < links.length; i++) {
+        var base = links[i].href;
+        links[i].href = base + (base.indexOf('?') !== -1 ? '&' : '?') + params.slice(1);
+      }
     })();
   </script>
 </body>
